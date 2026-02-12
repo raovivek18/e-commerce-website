@@ -3,20 +3,51 @@ import axios from 'axios';
 const API_BASE_URL = 'https://api.escuelajs.co/api/v1';
 
 const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+    baseURL: API_BASE_URL,
+    timeout: 10000,
+    headers: {
+        'Content-Type': 'application/json',
+    },
 });
 
-export const fetchAllProducts = async () => {
-  const response = await apiClient.get('/products');
-  return response.data;
+apiClient.interceptors.request.use(
+    (config) => {
+
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+apiClient.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        const customError = {
+            message: error.response?.data?.message || error.message || 'An unknown error occurred',
+            status: error.response?.status,
+        };
+        return Promise.reject(customError);
+    }
+);
+
+export const getAllProducts = async () => {
+    try {
+        const response = await apiClient.get('/products');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
 };
 
-export const fetchProductById = async (id) => {
-  const response = await apiClient.get(`/products/${id}`);
-  return response.data;
+export const getProductById = async (id) => {
+    try {
+        const response = await apiClient.get(`/products/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
 };
 
 export default apiClient;
+

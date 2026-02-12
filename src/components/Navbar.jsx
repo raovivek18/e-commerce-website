@@ -1,34 +1,71 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { ShoppingCart, Store, User } from 'lucide-react';
+import { ShoppingCart, Store, User, Menu, X } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { totalQuantity } = useSelector((state) => state.cart);
     const { isAuthenticated } = useSelector((state) => state.user);
+    const location = useLocation();
+
+    const isActive = (path) => location.pathname === path;
 
     return (
-        <nav className="navbar">
+        <nav className="navbar glass">
             <div className="container navbar-content">
-                <Link to="/" className="navbar-logo">
-                    <Store size={28} className="logo-icon" />
-                    <span>LuxeCommerce</span>
+                <Link to="/" className="navbar-logo" onClick={() => setIsMenuOpen(false)}>
+                    <div className="logo-wrapper">
+                        <Store size={24} />
+                    </div>
+                    <span>Luxe<span>Commerce</span></span>
                 </Link>
 
-                <div className="navbar-links">
-                    <Link to="/" className="nav-link">Shop</Link>
-                    <Link to="/cart" className="nav-link cart-link">
-                        <ShoppingCart size={22} />
-                        {totalQuantity > 0 && <span className="cart-badge">{totalQuantity}</span>}
+                {}
+                <div className="navbar-links desktop-only">
+                    <Link to="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}>
+                        Shop
+                    </Link>
+                    <Link to="/cart" className={`nav-link cart-link ${isActive('/cart') ? 'active' : ''}`}>
+                        <ShoppingCart size={20} />
+                        Cart
+                        {totalQuantity > 0 && <span className="cart-badge animate-pop">{totalQuantity}</span>}
                     </Link>
                     <div className="nav-user">
-                        <User size={22} />
-                        <span className="user-status">{isAuthenticated ? 'Profile' : 'Login'}</span>
+                        <User size={18} />
+                        <span className="user-status">{isAuthenticated ? 'Account' : 'Login'}</span>
+                    </div>
+                </div>
+
+                {}
+                <button
+                    className="mobile-menu-btn mobile-only"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    aria-label="Toggle menu"
+                >
+                    {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+            </div>
+
+            {}
+            <div className={`mobile-sidebar ${isMenuOpen ? 'open' : ''}`}>
+                <div className="mobile-sidebar-content">
+                    <Link to="/" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                        Shop
+                    </Link>
+                    <Link to="/cart" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>
+                        Cart ({totalQuantity})
+                    </Link>
+                    <div className="mobile-nav-link">
+                        {isAuthenticated ? 'My Account' : 'Login / Register'}
                     </div>
                 </div>
             </div>
+            {isMenuOpen && <div className="menu-overlay" onClick={() => setIsMenuOpen(false)}></div>}
         </nav>
     );
 };
 
 export default Navbar;
+

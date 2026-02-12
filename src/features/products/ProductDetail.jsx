@@ -1,91 +1,137 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProductDetail, clearSelectedProduct } from './productsSlice';
+import { fetchProductById, clearSelectedProduct } from './productsSlice';
 import { addToCart } from '../cart/cartSlice';
-import { ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCw } from 'lucide-react';
+import { ShoppingCart, ArrowLeft, ShieldCheck, Truck, RefreshCw, Star } from 'lucide-react';
 import './ProductDetail.css';
 
 const ProductDetail = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
     const { selectedProduct, loading, error } = useSelector((state) => state.products);
+    const [activeImage, setActiveImage] = useState(0);
 
     useEffect(() => {
-        dispatch(getProductDetail(id));
+        dispatch(fetchProductById(id));
         return () => dispatch(clearSelectedProduct());
     }, [dispatch, id]);
 
-    if (loading) {
-        return <div className="loader-container"><div className="loader"></div></div>;
+    if (loading && !selectedProduct) {
+        return (
+            <div className="container">
+                <div className="loader-container">
+                    <div className="loader"></div>
+                    <p>Unveiling the masterpiece...</p>
+                </div>
+            </div>
+        );
     }
 
     if (error) {
-        return <div className="error-message">Error: {error}</div>;
+        return (
+            <div className="container">
+                <div className="error-message">
+                    <h3>Something went wrong</h3>
+                    <p>{error}</p>
+                    <Link to="/" className="premium-btn" style={{ marginTop: '1rem' }}>Return to Shop</Link>
+                </div>
+            </div>
+        );
     }
 
     if (!selectedProduct) return null;
 
+    const images = selectedProduct.images.map(img => img.replace(/[\[\]"]/g, ''));
+
     return (
         <div className="product-detail-page animate-fade-in">
-            <Link to="/" className="back-link">
-                <ArrowLeft size={20} /> Back to Shop
-            </Link>
+            <div className="container">
+                <Link to="/" className="back-link group">
+                    <ArrowLeft size={18} /> <span>Back to Collections</span>
+                </Link>
 
-            <div className="product-detail-grid">
-                <div className="product-images-gallery">
-                    <img
-                        src={selectedProduct.images[0]?.replace(/[\[\]"]/g, '')}
-                        alt={selectedProduct.title}
-                        className="main-image premium-card"
-                    />
-                    <div className="image-thumbnails">
-                        {selectedProduct.images.slice(1, 4).map((img, idx) => (
+                <div className="product-detail-grid">
+                    <div className="product-visuals">
+                        <div className="main-image-container premium-card">
                             <img
-                                key={idx}
-                                src={img.replace(/[\[\]"]/g, '')}
-                                alt={`${selectedProduct.title} ${idx + 2}`}
-                                className="thumb-image premium-card"
+                                src={images[activeImage]}
+                                alt={selectedProduct.title}
+                                className="main-detail-image"
                             />
-                        ))}
+                        </div>
+                        <div className="image-navigation">
+                            {images.map((img, idx) => (
+                                <button
+                                    key={idx}
+                                    className={`thumb-nav-btn ${activeImage === idx ? 'active' : ''}`}
+                                    onClick={() => setActiveImage(idx)}
+                                >
+                                    <img src={img} alt={`Thumbnail ${idx + 1}`} />
+                                </button>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                <div className="product-info-panel">
-                    <div className="detail-category">{selectedProduct.category.name}</div>
-                    <h1 className="detail-title">{selectedProduct.title}</h1>
-                    <div className="detail-price">${selectedProduct.price}</div>
-
-                    <p className="detail-description">{selectedProduct.description}</p>
-
-                    <button
-                        className="premium-btn add-large-btn"
-                        onClick={() => dispatch(addToCart(selectedProduct))}
-                    >
-                        <ShoppingCart size={24} />
-                        Add to Shopping Bag
-                    </button>
-
-                    <div className="detail-features">
-                        <div className="feature-item">
-                            <Truck size={20} className="feature-icon" />
-                            <div>
-                                <strong>Free Shipping</strong>
-                                <span>On orders over $150</span>
+                    <div className="product-info-panel">
+                        <div className="info-header">
+                            <span className="info-category badge glass">{selectedProduct.category?.name || 'Category'}</span>
+                            <div className="rating">
+                                <Star size={16} fill="currentColor" className="star-icon" />
+                                <Star size={16} fill="currentColor" className="star-icon" />
+                                <Star size={16} fill="currentColor" className="star-icon" />
+                                <Star size={16} fill="currentColor" className="star-icon" />
+                                <Star size={16} className="star-icon" />
+                                <span>(1,240 Reviews)</span>
                             </div>
                         </div>
-                        <div className="feature-item">
-                            <RefreshCw size={20} className="feature-icon" />
-                            <div>
-                                <strong>30-Day Returns</strong>
-                                <span>No-hassle exchange</span>
+
+                        <h1 className="detail-title">{selectedProduct.title}</h1>
+
+                        <div className="detail-price-wrapper">
+                            <span className="detail-price">${selectedProduct.price}</span>
+                            <div className="inventory-status">
+                                <div className="status-dot"></div>
+                                <span>In Stock & Ready to Ship</span>
                             </div>
                         </div>
-                        <div className="feature-item">
-                            <ShieldCheck size={20} className="feature-icon" />
-                            <div>
-                                <strong>Secure Payment</strong>
-                                <span>SSL encrypted checkout</span>
+
+                        <div className="detail-description-box">
+                            <h4 className="section-subtitle">Exquisite Description</h4>
+                            <p className="detail-description">{selectedProduct.description}</p>
+                        </div>
+
+                        <div className="action-selection">
+                            <button
+                                className="premium-btn add-to-bag-btn"
+                                onClick={() => dispatch(addToCart(selectedProduct))}
+                            >
+                                <ShoppingCart size={22} />
+                                Add to Shopping Bag
+                            </button>
+                        </div>
+
+                        <div className="service-guarantees grid">
+                            <div className="guide-item">
+                                <Truck size={20} className="guide-icon" />
+                                <div>
+                                    <strong>Express Delivery</strong>
+                                    <span>Complimentary on orders over $250</span>
+                                </div>
+                            </div>
+                            <div className="guide-item">
+                                <RefreshCw size={20} className="guide-icon" />
+                                <div>
+                                    <strong>Conscious Returns</strong>
+                                    <span>30-day effortless exchange policy</span>
+                                </div>
+                            </div>
+                            <div className="guide-item">
+                                <ShieldCheck size={20} className="guide-icon" />
+                                <div>
+                                    <strong>Secure Acquisition</strong>
+                                    <span>Encrypted payment processing</span>
+                                </div>
                             </div>
                         </div>
                     </div>

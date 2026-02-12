@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProducts } from './productsSlice';
+import { fetchProducts } from './productsSlice';
 import ProductCard from '../../components/ProductCard';
 import './ProductsList.css';
 
@@ -9,7 +9,7 @@ const ProductsList = () => {
     const { products, loading, error } = useSelector((state) => state.products);
 
     useEffect(() => {
-        dispatch(getProducts());
+        dispatch(fetchProducts());
     }, [dispatch]);
 
     if (loading && products.length === 0) {

@@ -1,17 +1,24 @@
 .cart-page {
-    padding: 4rem 0;
+    padding: var(--sp-12) 0;
 }
 
 .cart-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 3rem;
+    align-items: flex-end;
+    margin-bottom: var(--sp-12);
 }
 
 .cart-header h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: 800;
+    line-height: 1;
+}
+
+.cart-subtitle {
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 0.5rem;
 }
 
 .clear-cart-btn {
@@ -19,8 +26,11 @@
     align-items: center;
     gap: 0.5rem;
     color: var(--text-muted);
-    font-weight: 600;
-    transition: color 0.2s;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-bottom: 0.5rem;
 }
 
 .clear-cart-btn:hover {
@@ -29,89 +39,133 @@
 
 .cart-grid {
     display: grid;
-    grid-template-columns: 1fr 400px;
-    gap: 3rem;
+    grid-template-columns: 1fr 420px;
+    gap: var(--sp-12);
     align-items: start;
 }
 
+.cart-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-6);
+}
+
 .summary-card {
-    padding: 2.5rem;
-    background: var(--surface);
+    padding: var(--sp-8);
+    border-radius: var(--radius);
 }
 
 .summary-card h3 {
     font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
+    font-weight: 800;
+    margin-bottom: var(--sp-8);
+    color: var(--text-main);
+}
+
+.summary-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
 }
 
 .summary-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1.25rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.free-tag {
+    color: var(--success);
+    font-weight: 800;
 }
 
 .summary-divider {
     height: 1px;
     background: var(--border);
-    margin: 1.5rem 0;
+    margin: var(--sp-4) 0;
 }
 
 .total-row {
     font-size: 1.5rem;
     font-weight: 800;
     color: var(--text-main);
-    margin-bottom: 2.5rem;
+    margin-top: var(--sp-2);
 }
 
 .checkout-btn {
     width: 100%;
-    justify-content: center;
-    padding: 1.25rem;
+    height: 60px;
+    margin-top: var(--sp-8);
+    font-size: 1.1rem;
 }
 
-.summary-info {
-    margin-top: 1.5rem;
-    font-size: 0.813rem;
+.payment-trust {
+    margin-top: var(--sp-6);
     text-align: center;
+    font-size: 0.8rem;
     color: var(--text-muted);
 }
 
 .empty-cart-container {
-    min-height: 60vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.empty-cart-content {
-    text-align: center;
-    padding: 6rem;
-    max-width: 600px;
+    padding: var(--sp-16) 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    justify-content: center;
+    position: relative;
+    text-align: center;
 }
 
-.empty-icon {
-    color: var(--border);
-    margin-bottom: 1rem;
+.icon-blob {
+    width: 120px;
+    height: 120px;
+    background: hsla(var(--primary-h), var(--primary-s), var(--primary-l), 0.1);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--sp-8);
+    color: var(--primary);
+    animation: blobMorph 8s ease-in-out infinite;
+}
+
+@keyframes blobMorph {
+    0% {
+        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    }
+
+    50% {
+        border-radius: 60% 40% 30% 70% / 50% 60% 40% 60%;
+    }
+
+    100% {
+        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    }
 }
 
 .empty-cart-content h2 {
-    font-size: 2rem;
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: var(--sp-3);
 }
 
 .empty-cart-content p {
     color: var(--text-muted);
-    margin-bottom: 1rem;
+    max-width: 400px;
+    margin: 0 auto var(--sp-8);
+    font-size: 1.1rem;
 }
 
 @media (max-width: 1200px) {
     .cart-grid {
         grid-template-columns: 1fr;
+    }
+
+    .cart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
     }
 }

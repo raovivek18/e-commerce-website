@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
+import Footer from './Footer';
 
 const Layout = () => {
     return (
@@ -8,19 +9,10 @@ const Layout = () => {
             <main className="main-content">
                 <Outlet />
             </main>
-            <footer className="footer" style={{
-                padding: '4rem 0',
-                textAlign: 'center',
-                borderTop: '1px solid var(--border)',
-                marginTop: '8rem',
-                color: 'var(--text-muted)'
-            }}>
-                <div className="container">
-                    <p>&copy; 2026 LuxeCommerce. All rights reserved.</p>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 };
 
 export default Layout;
+

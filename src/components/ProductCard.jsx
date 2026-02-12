@@ -12,30 +12,38 @@ const ProductCard = ({ product }) => {
         dispatch(addToCart(product));
     };
 
+    const imageUrl = product.images[0]?.replace(/[\[\]"]/g, '') || 'https://via.placeholder.com/300';
+
     return (
         <div className="product-card premium-card animate-fade-in">
-            <Link to={`/product/${product.id}`} className="card-image-wrapper">
-                <img
-                    src={product.images[0]?.replace(/[\[\]"]/g, '')}
-                    alt={product.title}
-                    onError={(e) => { e.target.src = 'https://via.placeholder.com/300'; }}
-                />
-                <div className="card-overlay">
-                    <Eye size={24} />
+            <div className="card-image-wrapper">
+                <img src={imageUrl} alt={product.title} loading="lazy" />
+                <div className="card-actions">
+                    <Link to={`/product/${product.id}`} className="action-btn" title="View Details">
+                        <Eye size={18} />
+                    </Link>
+                    <button
+                        className="action-btn primary"
+                        onClick={handleAddToCart}
+                        title="Add to Bag"
+                    >
+                        <ShoppingCart size={18} />
+                    </button>
                 </div>
-            </Link>
+                {product.category && (
+                    <span className="card-badge-top glass">{product.category.name}</span>
+                )}
+            </div>
 
             <div className="card-content">
-                <div className="card-category">{product.category.name}</div>
                 <Link to={`/product/${product.id}`} className="card-title">
                     {product.title}
                 </Link>
-
                 <div className="card-footer">
-                    <span className="card-price">${product.price}</span>
-                    <button onClick={handleAddToCart} className="add-to-cart-btn">
-                        <ShoppingCart size={20} />
-                    </button>
+                    <div className="price-group">
+                        <span className="price-label">Price</span>
+                        <span className="card-price">${product.price}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -43,3 +51,4 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
+

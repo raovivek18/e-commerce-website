@@ -6,34 +6,53 @@ import './CartItem.css';
 const CartItem = ({ item }) => {
     const dispatch = useDispatch();
 
+    const imageUrl = item.images[0]?.replace(/[\[\]"]/g, '') || 'https://via.placeholder.com/150';
+
     return (
-        <div className="cart-item premium-card">
-            <div className="item-image">
-                <img src={item.images[0]?.replace(/[\[\]"]/g, '')} alt={item.title} />
+        <div className="cart-item glass animate-fade-in">
+            <div className="item-image-wrapper">
+                <img src={imageUrl} alt={item.title} />
             </div>
 
-            <div className="item-details">
-                <h3 className="item-title">{item.title}</h3>
-                <p className="item-price">${item.price}</p>
+            <div className="item-info">
+                <div className="item-meta">
+                    <span className="item-category">{item.category?.name}</span>
+                    <h3 className="item-title">{item.title}</h3>
+                </div>
+
+                <div className="item-price-row">
+                    <span className="item-unit-price">${item.price}</span>
+                </div>
             </div>
 
-            <div className="item-actions">
-                <div className="quantity-controls">
-                    <button onClick={() => dispatch(decreaseQuantity(item.id))} className="qty-btn">
-                        <Minus size={16} />
+            <div className="item-controls">
+                <div className="qty-selector">
+                    <button
+                        onClick={() => dispatch(decreaseQuantity(item.id))}
+                        className="qty-action"
+                        disabled={item.quantity <= 1}
+                    >
+                        <Minus size={14} />
                     </button>
-                    <span className="qty-value">{item.quantity}</span>
-                    <button onClick={() => dispatch(increaseQuantity(item.id))} className="qty-btn">
-                        <Plus size={16} />
+                    <span className="qty-number">{item.quantity}</span>
+                    <button
+                        onClick={() => dispatch(increaseQuantity(item.id))}
+                        className="qty-action"
+                    >
+                        <Plus size={14} />
                     </button>
                 </div>
 
-                <button onClick={() => dispatch(removeFromCart(item.id))} className="remove-btn">
-                    <Trash2 size={20} />
+                <button
+                    onClick={() => dispatch(removeFromCart(item.id))}
+                    className="item-remove-btn"
+                    title="Remove from bag"
+                >
+                    <Trash2 size={18} />
                 </button>
             </div>
 
-            <div className="item-total">
+            <div className="item-total-price">
                 ${(item.price * item.quantity).toFixed(2)}
             </div>
         </div>
@@ -41,3 +60,4 @@ const CartItem = ({ item }) => {
 };
 
 export default CartItem;
+

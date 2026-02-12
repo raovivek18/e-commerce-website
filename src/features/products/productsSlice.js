@@ -1,32 +1,40 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchAllProducts, fetchProductById } from '../../services/api';
+import { getAllProducts, getProductById } from '../../services/api';
 
-export const getProducts = createAsyncThunk(
-    'products/getProducts',
+export const fetchProducts = createAsyncThunk(
+    'products/fetchProducts',
     async (_, { getState, rejectWithValue }) => {
         try {
             const { products } = getState().products;
+
             if (products.length > 0) {
                 return products;
             }
-            return await fetchAllProducts();
+
+            const data = await getAllProducts();
+            return data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+
+            return rejectWithValue(error.message);
         }
     }
 );
 
-export const getProductDetail = createAsyncThunk(
-    'products/getProductDetail',
+export const fetchProductById = createAsyncThunk(
+    'products/fetchProductById',
     async (id, { getState, rejectWithValue }) => {
         try {
             const { products } = getState().products;
-            const cachedProduct = products.find(p => p.id === parseInt(id));
-            if (cachedProduct) return cachedProduct;
 
-            return await fetchProductById(id);
+            const existingProduct = products.find(p => p.id === parseInt(id));
+            if (existingProduct) {
+                return existingProduct;
+            }
+
+            const data = await getProductById(id);
+            return data;
         } catch (error) {
-            return rejectWithValue(error.response?.data || error.message);
+            return rejectWithValue(error.message);
         }
     }
 );
@@ -48,27 +56,29 @@ const productsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getProducts.pending, (state) => {
+
+            .addCase(fetchProducts.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(getProducts.fulfilled, (state, action) => {
+            .addCase(fetchProducts.fulfilled, (state, action) => {
                 state.loading = false;
                 state.products = action.payload;
             })
-            .addCase(getProducts.rejected, (state, action) => {
+            .addCase(fetchProducts.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(getProductDetail.pending, (state) => {
+
+            .addCase(fetchProductById.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(getProductDetail.fulfilled, (state, action) => {
+            .addCase(fetchProductById.fulfilled, (state, action) => {
                 state.loading = false;
                 state.selectedProduct = action.payload;
             })
-            .addCase(getProductDetail.rejected, (state, action) => {
+            .addCase(fetchProductById.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });
@@ -77,3 +87,4 @@ const productsSlice = createSlice({
 
 export const { clearSelectedProduct } = productsSlice.actions;
 export default productsSlice.reducer;
+
