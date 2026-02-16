@@ -20,9 +20,14 @@ const ProductDetail = () => {
     if (loading && !selectedProduct) {
         return (
             <div className="container">
-                <div className="loader-container">
-                    <div className="loader"></div>
-                    <p>Unveiling the masterpiece...</p>
+                <div className="product-detail-grid">
+                    <div className="product-visuals skeleton" style={{ height: '500px' }}></div>
+                    <div className="product-info-panel">
+                        <div className="skeleton" style={{ height: '30px', width: '30%', marginBottom: '20px' }}></div>
+                        <div className="skeleton" style={{ height: '50px', width: '80%', marginBottom: '30px' }}></div>
+                        <div className="skeleton" style={{ height: '40px', width: '40%', marginBottom: '40px' }}></div>
+                        <div className="skeleton" style={{ height: '150px', width: '100%' }}></div>
+                    </div>
                 </div>
             </div>
         );

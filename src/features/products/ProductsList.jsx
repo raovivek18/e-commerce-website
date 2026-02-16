@@ -14,9 +14,16 @@ const ProductsList = () => {
 
     if (loading && products.length === 0) {
         return (
-            <div className="loader-container">
-                <div className="loader"></div>
-                <p>Curating the finest items for you...</p>
+            <div className="products-grid">
+                {[...Array(8)].map((_, i) => (
+                    <div key={i} className="product-card premium-card skeleton">
+                        <div className="card-image-wrapper skeleton" style={{ height: '300px' }}></div>
+                        <div className="card-content">
+                            <div className="skeleton" style={{ height: '20px', width: '80%', marginBottom: '10px' }}></div>
+                            <div className="skeleton" style={{ height: '20px', width: '40%' }}></div>
+                        </div>
+                    </div>
+                ))}
             </div>
         );
     }

@@ -22,7 +22,7 @@ const Navbar = () => {
                     <span>Luxe<span>Commerce</span></span>
                 </Link>
 
-                {}
+                { }
                 <div className="navbar-links desktop-only">
                     <Link to="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}>
                         Shop
@@ -30,7 +30,7 @@ const Navbar = () => {
                     <Link to="/cart" className={`nav-link cart-link ${isActive('/cart') ? 'active' : ''}`}>
                         <ShoppingCart size={20} />
                         Cart
-                        {totalQuantity > 0 && <span className="cart-badge animate-pop">{totalQuantity}</span>}
+                        {totalQuantity > 0 && <span key={totalQuantity} className="cart-badge animate-pop">{totalQuantity}</span>}
                     </Link>
                     <div className="nav-user">
                         <User size={18} />
@@ -38,7 +38,7 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                {}
+                { }
                 <button
                     className="mobile-menu-btn mobile-only"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -48,7 +48,7 @@ const Navbar = () => {
                 </button>
             </div>
 
-            {}
+            { }
             <div className={`mobile-sidebar ${isMenuOpen ? 'open' : ''}`}>
                 <div className="mobile-sidebar-content">
                     <Link to="/" className="mobile-nav-link" onClick={() => setIsMenuOpen(false)}>

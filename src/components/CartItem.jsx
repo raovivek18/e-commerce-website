@@ -1,9 +1,10 @@
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { increaseQuantity, decreaseQuantity, removeFromCart } from '../features/cart/cartSlice';
 import { Trash2, Plus, Minus } from 'lucide-react';
 import './CartItem.css';
 
-const CartItem = ({ item }) => {
+const CartItem = React.memo(({ item }) => {
     const dispatch = useDispatch();
 
     const imageUrl = item.images[0]?.replace(/[\[\]"]/g, '') || 'https://via.placeholder.com/150';
@@ -11,7 +12,7 @@ const CartItem = ({ item }) => {
     return (
         <div className="cart-item glass animate-fade-in">
             <div className="item-image-wrapper">
-                <img src={imageUrl} alt={item.title} />
+                <img src={imageUrl} alt={item.title} loading="lazy" />
             </div>
 
             <div className="item-info">
@@ -57,7 +58,7 @@ const CartItem = ({ item }) => {
             </div>
         </div>
     );
-};
+});
 
 export default CartItem;
 

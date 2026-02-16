@@ -1,6 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+// Helper to load cart from LocalStorage
+const loadCartFromStorage = () => {
+    try {
+        const serializedState = localStorage.getItem('cart');
+        if (serializedState === null) {
+            return undefined;
+        }
+        return JSON.parse(serializedState);
+    } catch (err) {
+        console.warn("Failed to load cart from LocalStorage:", err);
+        return undefined;
+    }
+};
+
+const initialState = loadCartFromStorage() || {
     cartItems: [],
     totalQuantity: 0,
     totalPrice: 0,
@@ -59,5 +73,19 @@ export const {
     decreaseQuantity,
     clearCart
 } = cartSlice.actions;
+
+// Middleware to sync cart state to LocalStorage
+export const cartMiddleware = store => next => action => {
+    const result = next(action);
+    if (action.type.startsWith('cart/')) {
+        const cartState = store.getState().cart;
+        try {
+            localStorage.setItem('cart', JSON.stringify(cartState));
+        } catch (err) {
+            console.warn("Failed to save cart to LocalStorage:", err);
+        }
+    }
+    return result;
+};
 
 export default cartSlice.reducer;

@@ -1,10 +1,11 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../features/cart/cartSlice';
 import { ShoppingCart, Eye } from 'lucide-react';
 import './ProductCard.css';
 
-const ProductCard = ({ product }) => {
+const ProductCard = React.memo(({ product }) => {
     const dispatch = useDispatch();
 
     const handleAddToCart = (e) => {
@@ -48,7 +49,7 @@ const ProductCard = ({ product }) => {
             </div>
         </div>
     );
-};
+});
 
 export default ProductCard;
 
