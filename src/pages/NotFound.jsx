@@ -1,27 +1,59 @@
 import { Link } from 'react-router-dom';
-import { Home, AlertCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Home, Search } from 'lucide-react';
+import '../styles/NotFound.css';
 
 const NotFound = () => {
     return (
-        <div className="container" style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            minHeight: '70vh',
-            textAlign: 'center',
-            gap: '1.5rem'
-        }}>
-            <AlertCircle size={80} color="var(--error)" />
-            <h1 style={{ fontSize: '3rem', fontWeight: 800 }}>404 - Page Not Found</h1>
-            <p style={{ fontSize: '1.25rem', color: 'var(--text-muted)', maxWidth: '500px' }}>
-                The page you are looking for doesn't exist or has been moved.
-                But don't worry, our premium collection is just a click away.
-            </p>
-            <Link to="/" className="premium-btn">
-                <Home size={20} /> Return Home
-            </Link>
-        </div>
+        <motion.div
+            className="not-found-page container"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+        >
+            <div className="not-found-content">
+                <motion.h1
+                    className="error-code"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.2, duration: 0.5 }}
+                >
+                    404
+                </motion.h1>
+
+                <motion.h2
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                >
+                    Page Not Found
+                </motion.h2>
+
+                <motion.p
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                >
+                    The page you're looking for doesn't exist or has been moved.
+                </motion.p>
+
+                <motion.div
+                    className="not-found-actions"
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                >
+                    <Link to="/" className="premium-btn">
+                        <Home size={20} />
+                        Back to Home
+                    </Link>
+                    <Link to="/" className="premium-btn outline">
+                        <Search size={20} />
+                        Browse Products
+                    </Link>
+                </motion.div>
+            </div>
+        </motion.div>
     );
 };
 

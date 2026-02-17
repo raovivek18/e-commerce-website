@@ -3,33 +3,48 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../features/cart/cartSlice';
 import { ShoppingCart, Eye } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useToast } from '../context/ToastContext';
 import './ProductCard.css';
 
-const ProductCard = React.memo(({ product }) => {
+const ProductCard = React.memo(({ product, index = 0 }) => {
     const dispatch = useDispatch();
+    const { addToast } = useToast();
 
     const handleAddToCart = (e) => {
         e.preventDefault();
         dispatch(addToCart(product));
+        addToast(`${product.title} added to cart`, 'success');
     };
 
     const imageUrl = product.images[0]?.replace(/[\[\]"]/g, '') || 'https://via.placeholder.com/300';
 
     return (
-        <div className="product-card premium-card animate-fade-in">
+        <motion.div
+            className="product-card premium-card"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+                duration: 0.4,
+                delay: index * 0.05,
+                ease: [0.16, 1, 0.3, 1]
+            }}
+            whileHover={{ y: -8 }}
+        >
             <div className="card-image-wrapper">
                 <img src={imageUrl} alt={product.title} loading="lazy" />
                 <div className="card-actions">
                     <Link to={`/product/${product.id}`} className="action-btn" title="View Details">
                         <Eye size={18} />
                     </Link>
-                    <button
+                    <motion.button
                         className="action-btn primary"
                         onClick={handleAddToCart}
                         title="Add to Bag"
+                        whileTap={{ scale: 0.9 }}
                     >
                         <ShoppingCart size={18} />
-                    </button>
+                    </motion.button>
                 </div>
                 {product.category && (
                     <span className="card-badge-top glass">{product.category.name}</span>
@@ -47,7 +62,7 @@ const ProductCard = React.memo(({ product }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 });
 

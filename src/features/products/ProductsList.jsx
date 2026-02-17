@@ -33,8 +33,8 @@ const ProductsList = ({ products, loading, error }) => {
 
     return (
         <div className="products-grid">
-            {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+            {products.map((product, index) => (
+                <ProductCard key={product.id} product={product} index={index} />
             ))}
         </div>
     );

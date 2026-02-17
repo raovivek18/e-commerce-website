@@ -8,6 +8,12 @@
   <title>E-Shop | Premium E-Commerce Experience</title>
   <meta name="description"
     content="Shop the latest premium products with E-Shop. Enjoy a seamless shopping experience with our curated collection." />
+  <script>
+    (function () {
+      const theme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
 </head>
 
 <body>

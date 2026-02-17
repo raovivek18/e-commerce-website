@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { ShoppingCart, Store, User, Menu, X } from 'lucide-react';
+import { ShoppingCart, Store, User, Menu, X, Moon, Sun } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 import './Navbar.css';
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { totalQuantity } = useSelector((state) => state.cart);
     const { isAuthenticated } = useSelector((state) => state.user);
+    const { theme, toggleTheme } = useTheme();
     const location = useLocation();
 
     const isActive = (path) => location.pathname === path;
@@ -22,7 +24,6 @@ const Navbar = () => {
                     <span>Luxe<span>Commerce</span></span>
                 </Link>
 
-                { }
                 <div className="navbar-links desktop-only">
                     <Link to="/" className={`nav-link ${isActive('/') ? 'active' : ''}`}>
                         Shop
@@ -32,6 +33,9 @@ const Navbar = () => {
                         Cart
                         {totalQuantity > 0 && <span key={totalQuantity} className="cart-badge animate-pop">{totalQuantity}</span>}
                     </Link>
+                    <button className="theme-toggle-btn" onClick={toggleTheme} aria-label="Toggle theme">
+                        {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                    </button>
                     <div className="nav-user">
                         <User size={18} />
                         <span className="user-status">{isAuthenticated ? 'Account' : 'Login'}</span>
